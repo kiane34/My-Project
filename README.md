@@ -27,11 +27,7 @@ A Flutter portfolio application that brings the laboratory activities into one r
 
 Demonstrates a `StatefulWidget`, local counter state, mathematical operations, and a history log.
 
-### Activity 2: Task & Notes Planner
-
-Demonstrates task creation, editing, deletion, categories, filtering, and local screen state.
-
-### Activity 3: Network Diagnostic Dashboard
+### Activity 2: Network Diagnostic Dashboard
 
 The diagnostic tool periodically measures connection health using a three-stage sequence:
 
@@ -52,14 +48,6 @@ The categorized result is published through `AppStateProvider`, allowing the res
 - Poor and Degraded connections use lightweight placeholder mode.
 
 The dashboard runs automatically every minute and also provides a manual diagnostic button. Probe failures are handled independently with fallback endpoints so one unavailable host does not immediately stop the sequence.
-
-### Activity 4: Network Monitor
-
-Demonstrates `connectivity_plus` stream listeners, Wi-Fi/cellular/offline detection, request queuing, simulated connection drops, retry handling, and automatic recovery after reconnection.
-
-### Settings
-
-Uses the global Provider state to update theme mode and profile details across the application.
 
 ## Project Structure
 
