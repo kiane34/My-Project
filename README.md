@@ -1,130 +1,144 @@
-# Kent & Paulene — Flutter Portfolio & State Management
-### CS 416 - Mobile Computing 2 | BSCS 4th Year
+# Camba Flutter Portfolio
 
-A master compilation Flutter application that serves as the hub for all laboratory activities, demonstrating declarative UI principles, multi-screen navigation, and global state management.
+CS 416 - Mobile Computing 2 | BSCS 4th Year
 
----
+A Flutter portfolio application that brings the laboratory activities into one responsive dashboard. The project demonstrates local state, CRUD workflows, network resiliency, global Provider state, and a dynamic network-performance throttle.
 
-## 📋 Project Overview
+## Project Details
 
-| Detail          | Value                                  |
-|----------------|----------------------------------------|
-| **Authors**     | Kent & Paulene                         |
-| **Subject**     | CS 416 - Mobile Computing 2            |
-| **Framework**   | Flutter 3.41.6 (Dart 3.11.4)          |
-| **State Mgmt**  | Provider ^6.1.5                        |
-| **Fonts**       | Google Fonts (Inter, Outfit)           |
+| Detail | Value |
+| --- | --- |
+| Authors | Camba & Pamat |
+| Framework | Flutter 3.41.6 |
+| Language | Dart 3.11.4 |
+| State management | Provider 6.1.5+1 |
+| Typography | Google Fonts: Inter and Outfit |
 
----
+## Features
 
-## 🗂️ App Structure
+### Master dashboard
 
-```
+- Responsive activity grid for mobile, tablet, and desktop layouts
+- Named-route navigation for every activity and settings screen
+- Global light/dark theme switching
+- Editable profile information and activity completion tracking
+
+### Activity 1: Counter & Math Hub
+
+Demonstrates a `StatefulWidget`, local counter state, mathematical operations, and a history log.
+
+### Activity 2: Task & Notes Planner
+
+Demonstrates task creation, editing, deletion, categories, filtering, and local screen state.
+
+### Activity 3: Network Diagnostic Dashboard
+
+The diagnostic tool periodically measures connection health using a three-stage sequence:
+
+1. **Baseline idle ping** measures latency before a transfer begins.
+2. **Download bandwidth and ping** downloads a test payload while measuring latency concurrently.
+3. **Upload bandwidth and ping** uploads a test payload while measuring latency concurrently.
+
+The results are classified into operational tiers:
+
+- **Excellent:** more than 10 Mbps
+- **Fair:** 2 to 10 Mbps
+- **Poor:** below 2 Mbps
+- **Degraded:** heavy packet loss, extreme latency, or unavailable probes
+
+The categorized result is published through `AppStateProvider`, allowing the rest of the application to react to current connection health. Activity 3 also demonstrates adaptive UI behavior:
+
+- Excellent and Fair connections use high-resolution media mode.
+- Poor and Degraded connections use lightweight placeholder mode.
+
+The dashboard runs automatically every minute and also provides a manual diagnostic button. Probe failures are handled independently with fallback endpoints so one unavailable host does not immediately stop the sequence.
+
+### Activity 4: Network Monitor
+
+Demonstrates `connectivity_plus` stream listeners, Wi-Fi/cellular/offline detection, request queuing, simulated connection drops, retry handling, and automatic recovery after reconnection.
+
+### Settings
+
+Uses the global Provider state to update theme mode and profile details across the application.
+
+## Project Structure
+
+```text
 lib/
-├── main.dart                         # App entry point, MaterialApp, routes, Provider setup
+├── main.dart
 ├── providers/
-│   └── app_state_provider.dart       # Global state: theme mode, user profile, activity completion
+│   └── app_state_provider.dart
 ├── services/
-│   └── network_service.dart          # Lab 4 stream listener, request queue, & auto-recovery engine
+│   ├── network_diagnostic_service.dart
+│   └── network_service.dart
 ├── screens/
-│   ├── home_dashboard_screen.dart    # Master menu dashboard
-│   ├── activity1_screen.dart         # Lab 1: Counter & Math Hub (StatefulWidget)
-│   ├── activity2_screen.dart         # Lab 2: Task & Notes Planner (StatefulWidget)
-│   ├── activity3_screen.dart         # Lab 3: Color & UI Playground (StatefulWidget)
-│   ├── network_monitor_screen.dart   # Lab 4: Network Monitor & Request Queue (StatefulWidget)
-│   └── settings_screen.dart          # Global settings (Provider theme + user profile)
+│   ├── home_dashboard_screen.dart
+│   ├── activity1_screen.dart
+│   ├── activity2_screen.dart
+│   ├── activity3_screen.dart
+│   ├── network_monitor_screen.dart
+│   └── settings_screen.dart
 └── widgets/
-    ├── activity_card.dart             # Reusable StatelessWidget lab card
-    ├── custom_button.dart             # Reusable StatelessWidget button
-    └── stat_summary_card.dart         # Reusable StatelessWidget stat indicator
+    ├── activity_card.dart
+    ├── custom_button.dart
+    └── stat_summary_card.dart
 ```
 
----
+## Routes
 
-## 🎯 Features Implemented
+| Route | Screen |
+| --- | --- |
+| `/` | Home dashboard |
+| `/activity1` | Counter & Math Hub |
+| `/activity2` | Task & Notes Planner |
+| `/activity3` | Network Diagnostic Dashboard |
+| `/network` | Network Monitor |
+| `/settings` | Global settings |
 
-### ✅ Multi-Screen Navigation
-- Named routes: `/`, `/activity1`, `/activity2`, `/activity3`, `/network`, `/settings`
-- Home Dashboard acts as the master menu with a responsive grid
+## Setup
 
-### ✅ Widget Architecture
-- **StatelessWidget** — `ActivityCard`, `CustomButton`, `StatSummaryCard`
-- **StatefulWidget** — All activity screens (local, screen-specific state)
-- Declarative, immutable UI patterns throughout
+### Requirements
 
-### ✅ Real-time Stream Listeners & Network Resiliency
-- `connectivity_plus` real-time stream subscription for Wi-Fi, Cellular, and Offline state detection.
-- **Request Queuing System**: Catches network loss during long-running data fetches and safely enqueues payloads.
-- **Graceful Recovery Engine**: Automatically flushes and retries queued requests upon network connection restoration.
+- Flutter SDK 3.x
+- Dart SDK 3.11.4 or compatible
+- Android device/emulator, iOS simulator, desktop target, or web browser
+- An internet connection for live Activity 3 measurements
 
-### ✅ Responsive Layout
-- `LayoutBuilder` + `GridView.count` adapts to mobile/tablet/desktop
-- `Expanded`, `Flexible`, `Column`, and `Row` — no fixed pixel widths
-- Overflow-safe text with `maxLines` and `TextOverflow.ellipsis`
-
-### ✅ Global State Management (Provider)
-- `AppStateProvider` manages:
-  - **Theme Mode** — System / Light / Dark (live toggle)
-  - **User Profile** — Name, course, section (live updates on Dashboard)
-  - **Activity Completion** — Tracks completed labs globally
-- Changing Settings **instantly** reflects across all screens
-
----
-
-## 🧪 Laboratory Screens
-
-| Screen   | Lab Title                  | Concept Demonstrated          |
-|----------|----------------------------|-------------------------------|
-| Lab 1    | Counter & Math Hub         | StatefulWidget, local state, history log |
-| Lab 2    | Task & Notes Planner       | CRUD, category filters, modal dialogs |
-| Lab 3    | Color & UI Playground      | Sliders, color palette, declarative rendering |
-| Lab 4    | Network Monitor            | Connectivity streams, request queue, auto-retry recovery |
-| Settings | Global App Settings        | Provider, live global state propagation |
-
----
-
-## 🚀 How to Run
-
-### Prerequisites
-- Flutter SDK 3.x installed
-- Android device or emulator connected
+### Run the application
 
 ```bash
-# Restore dependencies
 flutter pub get
-
-# Run on connected Android device
 flutter run
+```
 
-# Run on specific device
+To choose a specific target:
+
+```bash
+flutter devices
 flutter run -d <device-id>
 ```
 
-### Check all devices
-```bash
-flutter devices
-```
+Android release builds require network access because Activity 3 performs HTTPS diagnostic requests. The Android manifest includes the `INTERNET` permission.
 
----
-
-## 📦 Dependencies
+## Dependencies
 
 ```yaml
-dependencies:
-  flutter:
-    sdk: flutter
-  provider: ^6.1.5       # Global state management
-  google_fonts: ^8.2.1   # Inter & Outfit typography
-  connectivity_plus: ^7.3.1  # Network state detection
-  http: ^1.6.0            # HTTP request handling
-  cupertino_icons: ^1.0.8
+provider: ^6.1.5+1
+google_fonts: ^8.2.1
+connectivity_plus: ^7.3.1
+http: ^1.6.0
+cupertino_icons: ^1.0.8
 ```
 
----
+## Validation
 
-## ✅ Quality Checks
+```bash
+flutter analyze
+flutter test
+```
 
-```
-flutter analyze  → No issues found
-flutter test     → All tests passed
-```
+`flutter analyze` currently passes with no issues. The network queue test passes. The existing home smoke test needs its assertion updated because the dashboard intentionally displays `Mobile Computing Portfolio` in both the app bar and the hero section.
+
+## Notes
+
+Network measurements depend on DNS, server availability, device permissions, and the active connection. When all probe endpoints are unavailable, the diagnostic completes as **Degraded** instead of crashing, and the dashboard retains the failed-test details for troubleshooting.
